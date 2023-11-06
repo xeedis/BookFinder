@@ -1,4 +1,6 @@
-﻿using API.Interfaces;
+﻿using API.DTOs;
+using API.Helpers;
+using API.Interfaces;
 using Google.Apis.Books.v1.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,10 +13,12 @@ namespace API.Controllers;
 public class BooksController: BaseApiController
 {
     private readonly IGoogleApiService _googleApiService;
+    private readonly BookMapper _bookMapper;
 
-    public BooksController(IGoogleApiService googleApiService)
+    public BooksController(IGoogleApiService googleApiService, BookMapper bookMapper)
     {
         _googleApiService = googleApiService;
+        _bookMapper = bookMapper;
     }
 
     [HttpGet]
@@ -22,6 +26,11 @@ public class BooksController: BaseApiController
     {
         var books = await _googleApiService.FindBooks(parameters);
 
-        return Ok(books);
+        var result = new List<BookDto>();
+        foreach (var book in books.Items)
+        {
+            result.Add(_bookMapper.MapBooks(book));
+        }
+        return Ok(result);
     }
 }

@@ -1,7 +1,5 @@
 using API.Extensions;
-using API.Helpers;
-using Google.Apis.Books.v1;
-using Google.Apis.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +9,7 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors();
 //builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -22,9 +21,7 @@ var app = builder.Build();
     app.UseSwaggerUI();
 }*/
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
 app.MapControllers();
 

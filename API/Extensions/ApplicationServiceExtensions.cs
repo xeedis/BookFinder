@@ -10,6 +10,7 @@ public static class ApplicationServiceExtensions
     {
         services.Configure<GoogleSettings>(config.GetSection("GoogleApiSettings"));
         services.AddScoped<IGoogleApiService, GoogleApiService>();
+        services.AddScoped<BookMapper>();
         return services;
     }
 }
